@@ -1,0 +1,70 @@
+{
+  "entities": {
+    "StoreTemplate": {
+      "title": "StoreTemplate",
+      "description": "Blogger and WordPress templates and themes available in TechVault Pro marketplace",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "nameEn": { "type": "string", "maxLength": 200 },
+        "type": { "type": "string", "enum": ["blogger", "wordpress", "both"] },
+        "category": { "type": "string", "maxLength": 100 },
+        "categoryEn": { "type": "string", "maxLength": 100 },
+        "shortDescription": { "type": "string", "maxLength": 500 },
+        "shortDescriptionEn": { "type": "string", "maxLength": 500 },
+        "fullDescription": { "type": "string", "maxLength": 5000 },
+        "fullDescriptionEn": { "type": "string", "maxLength": 5000 },
+        "mainImage": { "type": "string", "maxLength": 1000 },
+        "previewImages": { "type": "array" },
+        "previewUrl": { "type": "string", "maxLength": 1000 },
+        "price": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "status": { "type": "string", "enum": ["published", "draft", "hidden"] },
+        "featured": { "type": "boolean" },
+        "features": { "type": "array" },
+        "featuresEn": { "type": "array" },
+        "requirements": { "type": "array" },
+        "licenseInfo": { "type": "string", "maxLength": 1000 },
+        "salesCount": { "type": "number" },
+        "rating": { "type": "number" },
+        "reviewsCount": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 100 },
+        "updatedAt": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["id", "name", "type", "price", "status"]
+    },
+    "StoreOrder": {
+      "title": "StoreOrder",
+      "description": "Customer orders submitted for purchasing template licenses",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "maxLength": 64 },
+        "customerName": { "type": "string", "maxLength": 150 },
+        "customerEmail": { "type": "string", "maxLength": 200 },
+        "customerPhone": { "type": "string", "maxLength": 50 },
+        "templateId": { "type": "string", "maxLength": 128 },
+        "templateName": { "type": "string", "maxLength": 200 },
+        "templateType": { "type": "string", "maxLength": 50 },
+        "price": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "paymentMethod": { "type": "string", "enum": ["paypal", "whatsapp", "manual"] },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "completed", "cancelled"] },
+        "createdAt": { "type": "string", "maxLength": 100 },
+        "updatedAt": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["orderId", "customerName", "customerEmail", "templateId", "templateName", "price", "status"]
+    }
+  },
+  "firestore": {
+    "/templates/{templateId}": {
+      "schema": "StoreTemplate",
+      "description": "Collection of published and draft templates managed by admin"
+    },
+    "/orders/{orderId}": {
+      "schema": "StoreOrder",
+      "description": "Collection of customer orders"
+    }
+  }
+}

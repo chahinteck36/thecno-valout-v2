@@ -1,0 +1,8 @@
+{
+  "name": "Remix TechVault Pro",
+  "description": "Professional tech Blogger template featuring app hosting, dark mode support, and organized categories for a modern user experience.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

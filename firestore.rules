@@ -1,0 +1,105 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ================================
+    // Authentication helpers
+    // ================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        (
+          request.auth.token.email == "gmouhamed36@gmail.com" ||
+          exists(
+            /databases/$(database)/documents/admins/$(request.auth.uid)
+          )
+        );
+    }
+
+
+    // ================================
+    // Templates
+    // ================================
+
+    match /templates/{templateId} {
+
+      // Anyone can view published templates.
+      // Admin can view all templates.
+      allow get: if isAdmin() ||
+                   resource.data.status == "published";
+
+      // Public catalog listing.
+      // Admin can list everything.
+      allow list: if isAdmin() ||
+                    resource.data.status == "published";
+
+      // Only admins can create templates.
+      allow create: if isAdmin();
+
+      // Only admins can modify templates.
+      allow update: if isAdmin();
+
+      // Only admins can delete templates.
+      allow delete: if isAdmin();
+    }
+
+
+    // ================================
+    // Orders
+    // ================================
+
+    match /orders/{orderId} {
+
+      // Customers can create a pending order.
+      // They cannot create an order with an arbitrary status.
+      allow create: if
+        request.resource.data.orderId is string &&
+        request.resource.data.customerEmail is string &&
+        request.resource.data.templateId is string &&
+        request.resource.data.price is number &&
+        request.resource.data.status == "pending";
+
+      // Only admins can view orders.
+      allow get, list: if isAdmin();
+
+      // Only admins can change order status/data.
+      allow update: if isAdmin();
+
+      // Only admins can delete orders.
+      allow delete: if isAdmin();
+    }
+
+
+    // ================================
+    // Admin roles
+    // ================================
+
+    match /admins/{adminId} {
+
+      // Admin role documents should not be publicly readable.
+      // An authenticated user may only read their own role document.
+      allow get: if isSignedIn() &&
+                   request.auth.uid == adminId;
+
+      // Listing admin accounts is forbidden.
+      allow list: if false;
+
+      // Only an existing admin can create/update/delete roles.
+      allow create, update, delete: if isAdmin();
+    }
+
+
+    // ================================
+    // Default deny
+    // ================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
