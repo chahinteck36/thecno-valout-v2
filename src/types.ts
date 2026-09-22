@@ -125,13 +125,25 @@ export type TemplatePlatformType = 'blogger' | 'wordpress' | 'both';
 export type TemplateStatus = 'published' | 'draft' | 'hidden';
 export type OrderStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
+export interface StoreTemplateFaq {
+  question: string;
+  questionEn: string;
+  answer: string;
+  answerEn: string;
+}
+
 export interface StoreTemplate {
   id: string;
+  slug?: string;
   name: string;
   nameEn?: string;
   type: TemplatePlatformType;
   category: string;
   categoryEn?: string;
+  categorySlug?: string;
+  subcategory?: string;
+  subcategoryEn?: string;
+  tags?: string[];
   shortDescription: string;
   shortDescriptionEn?: string;
   fullDescription: string;
@@ -139,14 +151,37 @@ export interface StoreTemplate {
   mainImage: string;
   previewImages: string[];
   previewUrl: string;
+  demoUrl?: string;
+  downloadUrl?: string;
   price: number;
+  originalPrice?: number;
+  discount?: string;
   currency: string;
   status: TemplateStatus;
   featured: boolean;
   features: string[];
   featuresEn?: string[];
   requirements: string[];
-  licenseInfo: string;
+  technologies?: string[];
+  pagesIncluded?: string[];
+  responsive?: string;
+  browserSupport?: string[];
+  framework?: string;
+  version?: string;
+  lastUpdated?: string;
+  fileSize?: string;
+  license?: string;
+  licenseInfo?: string;
+  author?: string;
+  publishedDate?: string;
+  updatedDate?: string;
+  faq?: StoreTemplateFaq[];
+  relatedProductSlugs?: string[];
+  seoTitle?: string;
+  seoTitleEn?: string;
+  seoDescription?: string;
+  seoDescriptionEn?: string;
+  keywords?: string[];
   salesCount?: number;
   rating?: number;
   reviewsCount?: number;

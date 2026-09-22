@@ -4,9 +4,10 @@ import { MOCK_POSTS, CATEGORIES_DATA, DEFAULT_THEME_CONFIG } from './data/mockPo
 import { Header, ActiveTab } from './components/Header';
 import { BloggerPreview } from './components/BloggerPreview';
 import { fetchPublishedTemplatesFromDb } from './lib/storeService';
+import { DEFAULT_TEMPLATES } from './data/defaultTemplates';
 import { HomeMarketplaceSection } from './components/HomeMarketplaceSection';
 
-// Code-split heavy modals, admin portal, and non-critical tabs
+// Code-split heavy modals, admin portal, and pages
 const InstallGuide = lazy(() => import('./components/InstallGuide').then(m => ({ default: m.InstallGuide })));
 const AdminPortal = lazy(() => import('./components/AdminPortal').then(m => ({ default: m.AdminPortal })));
 const ThemeCustomizerModal = lazy(() => import('./components/ThemeCustomizerModal').then(m => ({ default: m.ThemeCustomizerModal })));
@@ -14,18 +15,38 @@ const PayPalCheckoutModal = lazy(() => import('./components/PayPalCheckoutModal'
 const TemplateMarketplace = lazy(() => import('./components/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const TemplateDetailModal = lazy(() => import('./components/TemplateDetailModal').then(m => ({ default: m.TemplateDetailModal })));
 const TemplateLivePreviewModal = lazy(() => import('./components/TemplateLivePreviewModal').then(m => ({ default: m.TemplateLivePreviewModal })));
+const MarketplaceHome = lazy(() => import('./components/MarketplaceHome').then(m => ({ default: m.MarketplaceHome })));
+const CategoryPage = lazy(() => import('./components/CategoryPage').then(m => ({ default: m.CategoryPage })));
+const ProductTemplatePage = lazy(() => import('./components/ProductTemplatePage').then(m => ({ default: m.ProductTemplatePage })));
 
-const getInitialTab = (): ActiveTab => {
-  if (typeof window === 'undefined') return 'preview';
-  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
-  if (path === '/admin') return 'admin';
-  if (path === '/store') return 'store';
-  if (path === '/guide') return 'guide';
-  return 'preview';
+const parseInitialRoute = () => {
+  if (typeof window === 'undefined') return { tab: 'home' as ActiveTab, productSlug: '', categorySlug: '' };
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
+  
+  if (path === '/admin') return { tab: 'admin' as ActiveTab, productSlug: '', categorySlug: '' };
+  if (path === '/guide') return { tab: 'guide' as ActiveTab, productSlug: '', categorySlug: '' };
+  if (path === '/preview' || path === '/studio') return { tab: 'preview' as ActiveTab, productSlug: '', categorySlug: '' };
+  if (path === '/store' || path === '/templates') return { tab: 'store' as ActiveTab, productSlug: '', categorySlug: '' };
+  
+  if (path.startsWith('/templates/category/')) {
+    const cat = path.replace('/templates/category/', '');
+    return { tab: 'category' as ActiveTab, productSlug: '', categorySlug: cat };
+  }
+  
+  if (path.startsWith('/templates/')) {
+    const prod = path.replace('/templates/', '');
+    return { tab: 'product' as ActiveTab, productSlug: prod, categorySlug: '' };
+  }
+  
+  return { tab: 'home' as ActiveTab, productSlug: '', categorySlug: '' };
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>(getInitialTab);
+  const initialRoute = parseInitialRoute();
+  const [activeTab, setActiveTab] = useState<ActiveTab>(initialRoute.tab);
+  const [activeProductSlug, setActiveProductSlug] = useState<string>(initialRoute.productSlug);
+  const [activeCategorySlug, setActiveCategorySlug] = useState<string>(initialRoute.categorySlug);
+
   const [themeConfig, setThemeConfig] = useState<ThemeConfig>(DEFAULT_THEME_CONFIG);
   const [posts, setPosts] = useState<TechAppPost[]>(MOCK_POSTS);
   const [activePost, setActivePost] = useState<TechAppPost | null>(null);
@@ -34,7 +55,7 @@ export default function App() {
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
 
   // Store & Templates State
-  const [storeTemplates, setStoreTemplates] = useState<StoreTemplate[]>([]);
+  const [storeTemplates, setStoreTemplates] = useState<StoreTemplate[]>(DEFAULT_TEMPLATES);
   const [isLoadingStoreTemplates, setIsLoadingStoreTemplates] = useState(false);
   const [selectedStoreTemplate, setSelectedStoreTemplate] = useState<StoreTemplate | null>(null);
   const [detailModalTemplate, setDetailModalTemplate] = useState<StoreTemplate | null>(null);
@@ -45,9 +66,11 @@ export default function App() {
     setIsLoadingStoreTemplates(true);
     try {
       const templates = await fetchPublishedTemplatesFromDb();
-      setStoreTemplates(templates);
+      if (templates && templates.length > 0) {
+        setStoreTemplates(templates);
+      }
     } catch (err) {
-      console.warn('Could not load templates from Firestore:', err);
+      console.warn('Could not load templates from Firestore, using local catalog:', err);
     } finally {
       setIsLoadingStoreTemplates(false);
     }
@@ -60,16 +83,10 @@ export default function App() {
   // Handle browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
-      if (path === '/admin') {
-        setActiveTab('admin');
-      } else if (path === '/store') {
-        setActiveTab('store');
-      } else if (path === '/guide') {
-        setActiveTab('guide');
-      } else {
-        setActiveTab('preview');
-      }
+      const route = parseInitialRoute();
+      setActiveTab(route.tab);
+      if (route.productSlug) setActiveProductSlug(route.productSlug);
+      if (route.categorySlug) setActiveCategorySlug(route.categorySlug);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -80,9 +97,38 @@ export default function App() {
     if (tab !== 'preview') {
       setActivePost(null);
     }
-    const targetPath = tab === 'admin' ? '/admin' : tab === 'store' ? '/store' : tab === 'guide' ? '/guide' : '/';
+    const targetPath = tab === 'admin' 
+      ? '/admin' 
+      : tab === 'store' 
+      ? '/templates' 
+      : tab === 'guide' 
+      ? '/guide' 
+      : tab === 'preview' 
+      ? '/preview' 
+      : '/';
+      
     if (typeof window !== 'undefined' && window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectProduct = (template: StoreTemplate) => {
+    const slug = template.slug || template.id;
+    setActiveProductSlug(slug);
+    setActiveTab('product');
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `/templates/${slug}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectCategory = (categorySlug: string) => {
+    setActiveCategorySlug(categorySlug);
+    setActiveTab('category');
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', `/templates/category/${categorySlug}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -213,8 +259,111 @@ export default function App() {
       />
 
       {/* Main Studio Viewport */}
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-3 sm:py-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6">
         
+        {/* Marketplace Homepage */}
+        {activeTab === 'home' && (
+          <Suspense fallback={
+            <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
+              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <p className="text-sm font-bold">{themeConfig.language === 'en' ? 'Loading marketplace...' : 'جاري تحميل المتجر الرقمي...'}</p>
+            </div>
+          }>
+            <MarketplaceHome
+              templates={storeTemplates}
+              onSelectCategory={handleSelectCategory}
+              onPreviewTemplate={handlePreviewTemplate}
+              onBuyTemplate={handleBuyTemplate}
+              onSelectTemplate={handleSelectProduct}
+              onGoToStore={() => handleSelectTab('store')}
+              onGoToStudio={() => handleSelectTab('preview')}
+              language={themeConfig.language}
+            />
+          </Suspense>
+        )}
+
+        {/* Category Page */}
+        {activeTab === 'category' && (
+          <Suspense fallback={
+            <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
+              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <p className="text-sm font-bold">{themeConfig.language === 'en' ? 'Loading category...' : 'جاري تحميل تصنيف القوالب...'}</p>
+            </div>
+          }>
+            <CategoryPage
+              categorySlug={activeCategorySlug || 'business'}
+              templates={storeTemplates}
+              onBackToStore={() => handleSelectTab('store')}
+              onPreviewTemplate={handlePreviewTemplate}
+              onBuyTemplate={handleBuyTemplate}
+              onSelectTemplate={handleSelectProduct}
+              onSwitchCategory={handleSelectCategory}
+              language={themeConfig.language}
+            />
+          </Suspense>
+        )}
+
+        {/* Individual Product Page */}
+        {activeTab === 'product' && (
+          <Suspense fallback={
+            <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
+              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <p className="text-sm font-bold">{themeConfig.language === 'en' ? 'Loading template details...' : 'جاري تحميل مواصفات القالب...'}</p>
+            </div>
+          }>
+            {(() => {
+              const currentProduct = storeTemplates.find(
+                t => (t.slug && t.slug === activeProductSlug) || t.id === activeProductSlug
+              ) || storeTemplates[0];
+
+              if (!currentProduct) {
+                return (
+                  <div className="text-center py-16">
+                    <p className="text-slate-400 mb-4">{themeConfig.language === 'en' ? 'Template not found' : 'لم يتم العثور على القالب'}</p>
+                    <button onClick={() => handleSelectTab('store')} className="px-4 py-2 bg-cyan-500 text-slate-950 font-bold rounded-xl text-xs">
+                      {themeConfig.language === 'en' ? 'Return to Catalog' : 'العودة للمتجر'}
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <ProductTemplatePage
+                  template={currentProduct}
+                  onBack={() => handleSelectTab('store')}
+                  onPreview={handlePreviewTemplate}
+                  onBuy={handleBuyTemplate}
+                  onSelectCategory={handleSelectCategory}
+                  onSelectTemplate={handleSelectProduct}
+                  allTemplates={storeTemplates}
+                  language={themeConfig.language}
+                />
+              );
+            })()}
+          </Suspense>
+        )}
+
+        {/* Full Store Catalog */}
+        {activeTab === 'store' && (
+          <Suspense fallback={
+            <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
+              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+              <p className="text-sm font-bold">{themeConfig.language === 'en' ? 'Loading templates store...' : 'جاري تحميل متجر القوالب الاحترافية...'}</p>
+            </div>
+          }>
+            <TemplateMarketplace
+              templates={storeTemplates}
+              onPreviewTemplate={handlePreviewTemplate}
+              onBuyTemplate={handleBuyTemplate}
+              onSelectTemplateDetails={handleSelectProduct}
+              onSelectCategory={handleSelectCategory}
+              language={themeConfig.language}
+              isLoading={isLoadingStoreTemplates}
+            />
+          </Suspense>
+        )}
+
+        {/* Live Interactive Studio & Generator */}
         {activeTab === 'preview' && (
           <BloggerPreview
             posts={posts}
@@ -232,31 +381,13 @@ export default function App() {
                 templates={storeTemplates}
                 onPreview={handlePreviewTemplate}
                 onBuy={handleBuyTemplate}
-                onViewDetails={handleSelectTemplateDetails}
+                onViewDetails={handleSelectProduct}
                 onGoToFullStore={() => handleSelectTab('store')}
                 language={themeConfig.language}
                 isLoading={isLoadingStoreTemplates}
               />
             }
           />
-        )}
-
-        {activeTab === 'store' && (
-          <Suspense fallback={
-            <div className="p-12 text-center text-slate-400 flex flex-col items-center justify-center">
-              <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-              <p className="text-sm font-bold">{themeConfig.language === 'en' ? 'Loading templates store...' : 'جاري تحميل متجر القوالب الاحترافية...'}</p>
-            </div>
-          }>
-            <TemplateMarketplace
-              templates={storeTemplates}
-              onPreviewTemplate={handlePreviewTemplate}
-              onBuyTemplate={handleBuyTemplate}
-              onSelectTemplateDetails={handleSelectTemplateDetails}
-              language={themeConfig.language}
-              isLoading={isLoadingStoreTemplates}
-            />
-          </Suspense>
         )}
 
         {activeTab === 'guide' && (

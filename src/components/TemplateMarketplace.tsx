@@ -4,6 +4,7 @@ import {
   Layers, ArrowUpDown, CheckCircle, RefreshCw 
 } from 'lucide-react';
 import { StoreTemplate, ThemeLanguage } from '../types';
+import { MARKETPLACE_CATEGORIES } from '../data/categoriesData';
 import { TemplateCard } from './TemplateCard';
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   onPreviewTemplate: (template: StoreTemplate) => void;
   onBuyTemplate: (template: StoreTemplate) => void;
   onSelectTemplateDetails: (template: StoreTemplate) => void;
+  onSelectCategory?: (categorySlug: string) => void;
   language?: ThemeLanguage;
   isLoading?: boolean;
 }
@@ -20,17 +22,22 @@ export const TemplateMarketplace: React.FC<Props> = ({
   onPreviewTemplate,
   onBuyTemplate,
   onSelectTemplateDetails,
+  onSelectCategory,
   language = 'ar',
   isLoading = false,
 }) => {
   const isEn = language === 'en';
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [platformFilter, setPlatformFilter] = useState<'all' | 'blogger' | 'wordpress' | 'featured'>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'newest'>('featured');
 
   const filteredTemplates = useMemo(() => {
     return templates.filter((t) => {
+      // Category filter
+      if (selectedCategory !== 'all' && t.categorySlug !== selectedCategory) return false;
+
       // Platform filter
       if (platformFilter === 'blogger' && t.type !== 'blogger' && t.type !== 'both') return false;
       if (platformFilter === 'wordpress' && t.type !== 'wordpress' && t.type !== 'both') return false;
@@ -43,7 +50,8 @@ export const TemplateMarketplace: React.FC<Props> = ({
         const matchesCat = t.category.toLowerCase().includes(q) || (t.categoryEn && t.categoryEn.toLowerCase().includes(q));
         const matchesDesc = t.shortDescription.toLowerCase().includes(q) || (t.shortDescriptionEn && t.shortDescriptionEn.toLowerCase().includes(q));
         const matchesFeatures = (t.features || []).some(f => f.toLowerCase().includes(q));
-        if (!matchesName && !matchesCat && !matchesDesc && !matchesFeatures) return false;
+        const matchesTags = (t.tags || []).some(tag => tag.toLowerCase().includes(q));
+        if (!matchesName && !matchesCat && !matchesDesc && !matchesFeatures && !matchesTags) return false;
       }
 
       return true;
@@ -56,7 +64,7 @@ export const TemplateMarketplace: React.FC<Props> = ({
       if (!a.featured && b.featured) return 1;
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-  }, [templates, platformFilter, searchQuery, sortBy]);
+  }, [templates, selectedCategory, platformFilter, searchQuery, sortBy]);
 
   return (
     <div className="space-y-8" dir={isEn ? 'ltr' : 'rtl'}>
@@ -132,7 +140,7 @@ export const TemplateMarketplace: React.FC<Props> = ({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 md:pb-0">
           {[
             { id: 'all', label: isEn ? 'All' : 'الكل' },
             { id: 'blogger', label: isEn ? 'Blogger XML' : 'بلوجر' },
@@ -169,6 +177,39 @@ export const TemplateMarketplace: React.FC<Props> = ({
           </select>
         </div>
 
+      </div>
+
+      {/* Category Pills Strip */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs">
+        <button
+          onClick={() => setSelectedCategory('all')}
+          className={`px-3.5 py-1.5 rounded-xl font-bold transition whitespace-nowrap border ${
+            selectedCategory === 'all'
+              ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-black shadow-md'
+              : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+          }`}
+        >
+          {isEn ? 'All Categories' : 'كافة التصنيفات'}
+          <span className="ms-1.5 opacity-70">({templates.length})</span>
+        </button>
+
+        {MARKETPLACE_CATEGORIES.map((cat) => {
+          const count = templates.filter(t => t.categorySlug === cat.slug).length;
+          return (
+            <button
+              key={cat.slug}
+              onClick={() => setSelectedCategory(cat.slug)}
+              className={`px-3.5 py-1.5 rounded-xl font-bold transition whitespace-nowrap border ${
+                selectedCategory === cat.slug
+                  ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-black shadow-md'
+                  : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-slate-200'
+              }`}
+            >
+              {isEn ? cat.nameEn : cat.name}
+              <span className="ms-1.5 opacity-70">({count})</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Templates Grid */}

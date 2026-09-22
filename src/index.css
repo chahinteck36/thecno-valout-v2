@@ -44,3 +44,12 @@
 .theme-glow-shadow {
   box-shadow: 0 8px 24px -4px var(--theme-primary-glow) !important;
 }
+
+/* Hide scrollbar for mobile clean horizontal scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
