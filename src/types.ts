@@ -135,6 +135,8 @@ export interface StoreTemplateFaq {
 export interface StoreTemplate {
   id: string;
   slug?: string;
+  designKey?: string;
+  variant?: string;
   name: string;
   nameEn?: string;
   type: TemplatePlatformType;

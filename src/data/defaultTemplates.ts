@@ -6,6 +6,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'technoapp-pro-blogger',
+    designKey: 'startup',
+    variant: 'developer-tools',
     slug: 'technoapp-pro-blogger',
     name: 'TechnoApp Pro - قالب تطبيقات وبرامج تقنية احترافي',
     nameEn: 'TechnoApp Pro - Modern Tech & App Download Studio Theme',
@@ -96,6 +98,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'apex-corporate-business',
+    designKey: 'corporate',
+    variant: 'enterprise',
     slug: 'apex-corporate-business',
     name: 'Apex Corporate - قالب شركات ومؤسسات أعمال رائد',
     nameEn: 'Apex Corporate - Enterprise Business & Consulting Theme',
@@ -171,6 +175,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'elevate-saas-platform',
+    designKey: 'startup',
+    variant: 'enterprise-saas',
     slug: 'elevate-saas-platform',
     name: 'Elevate SaaS - قالب منصات البرمجيات السحابية B2B',
     nameEn: 'Elevate SaaS - B2B Cloud Software & Tech Platform Theme',
@@ -237,6 +243,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'strata-advisory-consulting',
+    designKey: 'corporate',
+    variant: 'consulting',
     slug: 'strata-advisory-consulting',
     name: 'Strata Advisory - قالب مكاتب الاستشارات المالية والإدارية',
     nameEn: 'Strata Advisory - Financial & Management Consulting Theme',
@@ -291,6 +299,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'vanguard-digital-agency',
+    designKey: 'corporate',
+    variant: 'modern-agency',
     slug: 'vanguard-digital-agency',
     name: 'Vanguard Agency - قالب وكالات التسويق والتصميم الرقمي',
     nameEn: 'Vanguard Agency - Creative Digital Agency & Studio Theme',
@@ -349,6 +359,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'devfolio-pro-developer',
+    designKey: 'portfolio',
+    variant: 'developer',
     slug: 'devfolio-pro-developer',
     name: 'DevFolio Pro - قالب بورتفوليو مهندسي ومطوري البرمجيات',
     nameEn: 'DevFolio Pro - Senior Full-Stack Developer Portfolio Theme',
@@ -403,6 +415,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'luxe-minimal-designer',
+    designKey: 'portfolio',
+    variant: 'creative-studio',
     slug: 'luxe-minimal-designer',
     name: 'Luxe Minimal - قالب بورتفوليو مصممي واجهات وتجربة المستخدم',
     nameEn: 'Luxe Minimal - UI/UX Designer & Art Director Portfolio',
@@ -457,6 +471,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'shutter-art-photographer',
+    designKey: 'portfolio',
+    variant: 'photography',
     slug: 'shutter-art-photographer',
     name: 'ShutterArt - قالب معارض الصور الفوتوغرافية والفنون البصرية',
     nameEn: 'ShutterArt - Minimalist Fine Art Photography Portfolio Theme',
@@ -511,6 +527,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'artisan-creative-portfolio',
+    designKey: 'portfolio',
+    variant: 'creative-studio',
     slug: 'artisan-creative-portfolio',
     name: 'Artisan - قالب المبدعين والفنانين المستقلين',
     nameEn: 'Artisan - Freelance Creative & Brand Designer Portfolio',
@@ -566,6 +584,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'aura-fashion-boutique',
+    designKey: 'ecommerce',
+    variant: 'general-store',
     slug: 'aura-fashion-boutique',
     name: 'Aura Fashion - قالب متاجر الأزياء والموضة العصرية',
     nameEn: 'Aura Fashion - Luxury Apparel & Boutique Store Theme',
@@ -620,6 +640,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'volt-electronics-megastore',
+    designKey: 'ecommerce',
+    variant: 'electronics',
     slug: 'volt-electronics-megastore',
     name: 'Volt Tech - قالب متاجر الإلكترونيات والأجهزة الذكية',
     nameEn: 'Volt Tech - Electronics & Hardware Megastore Theme',
@@ -674,6 +696,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'pixelvault-digital-assets',
+    designKey: 'ecommerce',
+    variant: 'digital-market',
     slug: 'pixelvault-digital-assets',
     name: 'PixelVault - قالب متجر المنتجات الرقمية والملفات البرمجية',
     nameEn: 'PixelVault - Digital Products & Software Marketplace Theme',
@@ -725,6 +749,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'nordic-living-furniture',
+    designKey: 'ecommerce',
+    variant: 'general-store',
     slug: 'nordic-living-furniture',
     name: 'Nordic Living - قالب الأثاث والديكور المنزلي الاسكندنافي',
     nameEn: 'Nordic Living - Modern Furniture & Home Decor Store Theme',
@@ -780,6 +806,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'bistro-gusto-restaurant',
+    designKey: 'service',
+    variant: 'hospitality-hotel',
     slug: 'bistro-gusto-restaurant',
     name: 'Bistro Gusto - قالب المطاعم والمقاهي الراقية وحجز الطاولات',
     nameEn: 'Bistro Gusto - Fine Dining Restaurant & Table Booking Theme',
@@ -831,6 +859,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'prime-estates-realty',
+    designKey: 'service',
+    variant: 'hospitality-hotel',
     slug: 'prime-estates-realty',
     name: 'PrimeEstates - قالب العقارات والمكاتب العقارية الفاخرة',
     nameEn: 'PrimeEstates - Luxury Real Estate & Property Listings Theme',
@@ -882,6 +912,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'cura-health-medical-clinic',
+    designKey: 'service',
+    variant: 'legal-firm',
     slug: 'cura-health-medical-clinic',
     name: 'CuraHealth - قالب المراكز الطبية والعيادات والأطباء',
     nameEn: 'CuraHealth - Medical Center, Doctors & Clinic Theme',
@@ -933,6 +965,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'solidbuild-construction',
+    designKey: 'corporate',
+    variant: 'enterprise',
     slug: 'solidbuild-construction',
     name: 'SolidBuild - قالب شركات المقاولات والبناء والتشييد',
     nameEn: 'SolidBuild - General Contracting & Architecture Theme',
@@ -984,6 +1018,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'sparkle-pro-cleaning',
+    designKey: 'service',
+    variant: 'cleaning-services',
     slug: 'sparkle-pro-cleaning',
     name: 'SparklePro - قالب شركات خدمات التنظيف المنزلي والتجاري',
     nameEn: 'SparklePro - Residential & Commercial Cleaning Services Theme',
@@ -1035,6 +1071,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'velocity-drive-car-rental',
+    designKey: 'service',
+    variant: 'cleaning-services',
     slug: 'velocity-drive-car-rental',
     name: 'VelocityDrive - قالب مكاتب تأجير السيارات وحجز أساطيل المركبات',
     nameEn: 'VelocityDrive - Car Rental & Vehicle Fleet Booking Theme',
@@ -1090,6 +1128,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'nexus-saas-launch',
+    designKey: 'landing',
+    variant: 'product-launch',
     slug: 'nexus-saas-launch',
     name: 'Nexus Launch - صفحة هبوط إطلاق المنتجات الرقمية والبرمجيات',
     nameEn: 'Nexus Launch - High-Converting Product Launch Landing Page',
@@ -1141,6 +1181,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'pulse-mobile-app-landing',
+    designKey: 'landing',
+    variant: 'mobile-app',
     slug: 'pulse-mobile-app-landing',
     name: 'Pulse App - صفحة هبوط تطبيقات الهواتف الذكية iOS و Android',
     nameEn: 'Pulse App - Next-Gen Mobile App Showcase Landing Page',
@@ -1196,6 +1238,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'metrix-analytics-dashboard',
+    designKey: 'dashboard',
+    variant: 'analytics',
     slug: 'metrix-analytics-dashboard',
     name: 'Metrix Admin - لوحة تحكم وإحصائيات متطورة للمواقع والأنظمة',
     nameEn: 'Metrix Admin - Modern SaaS & Web Analytics Dashboard Theme',
@@ -1251,6 +1295,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   // ==========================================
   {
     id: 'techpress-prime-magazine',
+    designKey: 'magazine',
+    variant: 'newswire',
     slug: 'techpress-prime-magazine',
     name: 'TechPress Prime - مجلة الأخبار والتقنية والمراجعات الاحترافية',
     nameEn: 'TechPress Prime - Tech News & Editorial Magazine Theme',
@@ -1315,6 +1361,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'cyberguard-security-wp',
+    designKey: 'startup',
+    variant: 'ai-saas',
     slug: 'cyberguard-security-wp',
     name: 'CyberGuard - قالب أمن المعلومات والبرمجيات وشبكات VPN',
     nameEn: 'CyberGuard - Cybersecurity, InfoSec & VPN Solutions Theme',
@@ -1366,6 +1414,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'apkpulse-gaming-store',
+    designKey: 'ecommerce',
+    variant: 'digital-market',
     slug: 'apkpulse-gaming-store',
     name: 'APKPulse Gaming - قالب الألعاب وتطبيقات الجوال الاحترافي',
     nameEn: 'APKPulse Gaming - Mobile Gaming & APK Downloads Hub Theme',
@@ -1417,6 +1467,8 @@ export const DEFAULT_TEMPLATES: StoreTemplate[] = [
   },
   {
     id: 'aitools-directory-hub',
+    designKey: 'magazine',
+    variant: 'devbyte',
     slug: 'aitools-directory-hub',
     name: 'AI Tools Radar - دليل أدوات الذكاء الاصطناعي والتطبيقات الذكية',
     nameEn: 'AI Tools Radar - Curated AI SaaS Directory & Prompt Theme',

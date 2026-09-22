@@ -358,3 +358,5 @@ export const MarketplaceHome: React.FC<Props> = ({
     </div>
   );
 };
+
+export default MarketplaceHome;

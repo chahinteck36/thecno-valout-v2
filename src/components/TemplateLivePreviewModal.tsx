@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { StoreTemplate, ThemeConfig, TechAppPost, CategoryInfo, ThemeLanguage } from '../types';
 import { BloggerPreview } from './BloggerPreview';
+import { TemplateRenderer } from './TemplateRenderer';
 import { TechPressMagazineView } from './templates/TechPressMagazineView';
 import { APKPulseGamingView } from './templates/APKPulseGamingView';
 import { AIToolsDirectoryView } from './templates/AIToolsDirectoryView';
@@ -93,7 +94,9 @@ export const TemplateLivePreviewModal: React.FC<Props> = ({
 
   const renderTemplateView = () => {
     const tid = currentTemplate.id.toLowerCase();
-    if (tid.includes('techpress') || tid.includes('press')) {
+    
+    // Legacy specialized views for earlier specific demos
+    if (tid === 'techpress-prime-magazine') {
       return (
         <TechPressMagazineView
           config={templateConfig}
@@ -104,7 +107,7 @@ export const TemplateLivePreviewModal: React.FC<Props> = ({
         />
       );
     }
-    if (tid.includes('gaming') || tid.includes('apkpulse')) {
+    if (tid === 'apkpulse-gaming-store') {
       return (
         <APKPulseGamingView
           config={templateConfig}
@@ -115,7 +118,7 @@ export const TemplateLivePreviewModal: React.FC<Props> = ({
         />
       );
     }
-    if (tid.includes('aitools') || tid.includes('directory')) {
+    if (tid === 'aitools-directory-hub') {
       return (
         <AIToolsDirectoryView
           config={templateConfig}
@@ -126,7 +129,7 @@ export const TemplateLivePreviewModal: React.FC<Props> = ({
         />
       );
     }
-    if (tid.includes('cyberguard') || tid.includes('guard') || tid.includes('security')) {
+    if (tid === 'cyberguard-security-wp') {
       return (
         <CyberGuardSecurityView
           config={templateConfig}
@@ -137,18 +140,16 @@ export const TemplateLivePreviewModal: React.FC<Props> = ({
         />
       );
     }
+
+    // Modern Scalable Template Renderer with distinct layouts, designs, typography, and variants
     return (
-      <BloggerPreview
-        posts={posts}
-        categories={categories}
+      <TemplateRenderer
+        template={currentTemplate}
         config={templateConfig}
-        activePost={activePost}
-        onSelectPost={setActivePost}
         isDark={isDark}
         onToggleDark={() => setIsDark(!isDark)}
-        deviceMode={deviceMode}
-        onChangeDeviceMode={setDeviceMode}
-        hideInnerToolbar={true}
+        onBuyNow={() => onBuy(currentTemplate)}
+        language={language}
       />
     );
   };

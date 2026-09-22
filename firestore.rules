@@ -94,6 +94,11 @@ service cloud.firestore {
     }
 
 
+    // Connection test document
+    match /test/connection {
+      allow read: if true;
+    }
+
     // ================================
     // Default deny
     // ================================

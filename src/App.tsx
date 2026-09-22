@@ -6,8 +6,9 @@ import { BloggerPreview } from './components/BloggerPreview';
 import { fetchPublishedTemplatesFromDb } from './lib/storeService';
 import { DEFAULT_TEMPLATES } from './data/defaultTemplates';
 import { HomeMarketplaceSection } from './components/HomeMarketplaceSection';
+import { MarketplaceHome } from './components/MarketplaceHome';
 
-// Code-split heavy modals, admin portal, and pages
+// Code-split heavy modals, admin portal, and secondary pages
 const InstallGuide = lazy(() => import('./components/InstallGuide').then(m => ({ default: m.InstallGuide })));
 const AdminPortal = lazy(() => import('./components/AdminPortal').then(m => ({ default: m.AdminPortal })));
 const ThemeCustomizerModal = lazy(() => import('./components/ThemeCustomizerModal').then(m => ({ default: m.ThemeCustomizerModal })));
@@ -15,7 +16,6 @@ const PayPalCheckoutModal = lazy(() => import('./components/PayPalCheckoutModal'
 const TemplateMarketplace = lazy(() => import('./components/TemplateMarketplace').then(m => ({ default: m.TemplateMarketplace })));
 const TemplateDetailModal = lazy(() => import('./components/TemplateDetailModal').then(m => ({ default: m.TemplateDetailModal })));
 const TemplateLivePreviewModal = lazy(() => import('./components/TemplateLivePreviewModal').then(m => ({ default: m.TemplateLivePreviewModal })));
-const MarketplaceHome = lazy(() => import('./components/MarketplaceHome').then(m => ({ default: m.MarketplaceHome })));
 const CategoryPage = lazy(() => import('./components/CategoryPage').then(m => ({ default: m.CategoryPage })));
 const ProductTemplatePage = lazy(() => import('./components/ProductTemplatePage').then(m => ({ default: m.ProductTemplatePage })));
 

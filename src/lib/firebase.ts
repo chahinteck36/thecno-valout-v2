@@ -1,17 +1,9 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore, getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import firebaseConfig from '../../firebase-applet-config.json';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyCxcNa2RlyOXQU0xY7oWJmPBw0E6TIPdmY",
-    authDomain: "techvault-pro-8a785.firebaseapp.com",
-    projectId: "techvault-pro-8a785",
-    storageBucket: "techvault-pro-8a785.firebasestorage.app",
-    messagingSenderId: "577138404350",
-    appId: "1:577138404350:web:17e60367a34601b61daeaf"
-  };
-
-// Initialize Firebase App singleton
+// Initialize Firebase App singleton using actual project config
 export const app =
   getApps().length === 0
     ? initializeApp(firebaseConfig)
@@ -20,5 +12,31 @@ export const app =
 // Initialize Firebase Authentication
 export const auth = getAuth(app);
 
-// Initialize Firestore
-export const db = getFirestore(app);
+// Initialize Firestore with specific database ID and experimentalForceLongPolling
+// to prevent WebChannel chunked streaming 10-second timeout in iframe sandboxes and proxies
+let firestoreDb;
+try {
+  firestoreDb = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+  }, firebaseConfig.firestoreDatabaseId);
+} catch {
+  firestoreDb = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+}
+
+export const db = firestoreDb;
+
+// Validate Connection to Firestore on boot (as required by Firestore skill)
+async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.error('Please check your Firebase configuration.');
+    }
+  }
+}
+
+if (typeof window !== 'undefined') {
+  testConnection();
+}
+
