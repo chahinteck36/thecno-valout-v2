@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { StoreTemplate, ThemeLanguage } from '../types';
 import { MARKETPLACE_CATEGORIES, MarketplaceCategory } from '../data/categoriesData';
 import { TemplateCard } from './TemplateCard';
+import { OFFICIAL_SITE_URL, updatePageSeo } from '../utils/seo';
 import { 
   ArrowLeft, ArrowRight, Filter, ArrowUpDown, 
   Layers, Sparkles, Briefcase, Palette, ShoppingBag, 
@@ -56,18 +57,20 @@ export const CategoryPage: React.FC<Props> = ({
     });
   }, [templates, category.slug, platformFilter, sortBy]);
 
-  // Dynamic SEO Structured Data for Category Collection
+  // Dynamic SEO Structured Data, Canonical & Meta Tags for Category Collection
   useEffect(() => {
-    const currentUrl = `https://techvaul-pro.store/templates/category/${category.slug}`;
+    const currentUrl = `${OFFICIAL_SITE_URL}/templates/category/${category.slug}`;
     const pageTitle = `${isEn ? category.nameEn : category.name} Templates | TechVault-Pro`;
     const metaDesc = isEn ? category.shortDescriptionEn : category.shortDescription;
 
-    document.title = pageTitle;
-
-    let descMeta = document.querySelector('meta[name="description"]');
-    if (descMeta) {
-      descMeta.setAttribute('content', metaDesc);
-    }
+    // Enforce official canonical, OpenGraph, title, and description
+    updatePageSeo({
+      title: pageTitle,
+      description: metaDesc,
+      canonicalPath: `/templates/category/${category.slug}`,
+      ogImage: category.heroBanner,
+      ogType: 'website'
+    });
 
     const jsonLdId = 'category-structured-data';
     let scriptTag = document.getElementById(jsonLdId) as HTMLScriptElement | null;
@@ -89,8 +92,8 @@ export const CategoryPage: React.FC<Props> = ({
           "description": metaDesc,
           "isPartOf": {
             "@type": "WebSite",
-            "name": "TechVault Pro",
-            "url": "https://techvaul-pro.store/"
+            "name": "TechVault-Pro",
+            "url": `${OFFICIAL_SITE_URL}/`
           }
         },
         {
@@ -101,13 +104,13 @@ export const CategoryPage: React.FC<Props> = ({
               "@type": "ListItem",
               "position": 1,
               "name": isEn ? "Home" : "الرئيسية",
-              "item": "https://techvaul-pro.store/"
+              "item": `${OFFICIAL_SITE_URL}/`
             },
             {
               "@type": "ListItem",
               "position": 2,
               "name": isEn ? "Templates Store" : "متجر القوالب",
-              "item": "https://techvaul-pro.store/templates"
+              "item": `${OFFICIAL_SITE_URL}/templates`
             },
             {
               "@type": "ListItem",

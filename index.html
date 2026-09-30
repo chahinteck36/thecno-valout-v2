@@ -17,10 +17,21 @@
     <meta name="keywords" content="website templates, Blogger XML Theme, WordPress themes, SaaS templates, portfolio templates, ecommerce themes, responsive web templates, TechVault-Pro" />
     <meta name="author" content="TechVault-Pro" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <!-- Dynamic Self-Referencing Canonical Tag & OpenGraph URL -->
+    <!-- Canonical & OpenGraph Official URL -->
+    <link rel="canonical" href="https://techvault-pro.store/" />
+    <meta property="og:url" content="https://techvault-pro.store/" />
+
+    <!-- Dynamic Canonical & OpenGraph URL Script Anchored to Official Domain -->
     <script>
       (function() {
-        var cleanUrl = window.location.origin + window.location.pathname;
+        var BASE_URL = 'https://techvault-pro.store';
+        var pathname = window.location.pathname || '/';
+        if (!pathname.startsWith('/')) pathname = '/' + pathname;
+        if (pathname.length > 1 && pathname.endsWith('/')) {
+          pathname = pathname.slice(0, -1);
+        }
+        var cleanUrl = BASE_URL + (pathname === '/' ? '/' : pathname);
+
         var canonical = document.querySelector("link[rel='canonical']");
         if (!canonical) {
           canonical = document.createElement('link');
@@ -90,91 +101,21 @@
       "@graph": [
         {
           "@type": "WebSite",
-          "@id": "https://techvaul-pro.store/#website",
-          "url": "https://techvaul-pro.store/",
+          "@id": "https://techvault-pro.store/#website",
+          "url": "https://techvault-pro.store/",
           "name": "TechVault-Pro Marketplace",
           "description": "Premier digital marketplace for production-ready website templates, Blogger XML themes, and digital web assets.",
-          "inLanguage": ["en", "ar"],
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://techvaul-pro.store/templates?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
-        },
-        {
-          "@type": "Product",
-          "@id": "https://techvaul-pro.store/#product",
-          "name": "TechnoApp Pro - Blogger & WordPress Tech Theme",
-          "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
-          "description": "High-performance Blogger XML and WordPress theme engineered for tech blogs, software downloads, and digital showcases.",
-          "brand": {
-            "@type": "Brand",
-            "name": "TechVault-Pro"
-          },
-          "offers": {
-            "@type": "Offer",
-            "price": "29.99",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock",
-            "url": "https://techvaul-pro.store/",
-            "hasMerchantReturnPolicy": {
-              "@type": "MerchantReturnPolicy",
-              "applicableCountry": "US",
-              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-              "merchantReturnDays": 30,
-              "returnMethod": "https://schema.org/ReturnByMail",
-              "returnFees": "https://schema.org/FreeReturn"
-            },
-            "shippingDetails": {
-              "@type": "OfferShippingDetails",
-              "shippingRate": {
-                "@type": "MonetaryAmount",
-                "value": "0",
-                "currency": "USD"
-              },
-              "shippingDestination": {
-                "@type": "DefinedRegion",
-                "addressCountry": "US"
-              },
-              "deliveryTime": {
-                "@type": "ShippingDeliveryTime",
-                "handlingTime": {
-                  "@type": "QuantitativeValue",
-                  "minValue": 1,
-                  "maxValue": 2,
-                  "unitCode": "DAY"
-                },
-                "transitTime": {
-                  "@type": "QuantitativeValue",
-                  "minValue": 3,
-                  "maxValue": 5,
-                  "unitCode": "DAY"
-                }
-              }
-            }
-          }
+          "inLanguage": ["en", "ar"]
         },
         {
           "@type": "Organization",
-          "@id": "https://techvaul-pro.store/#organization",
+          "@id": "https://techvault-pro.store/#organization",
           "name": "TechVault-Pro",
-          "url": "https://techvaul-pro.store/",
-          "logo": "https://techvaul-pro.store/favicon.png"
+          "url": "https://techvault-pro.store/",
+          "logo": "https://techvault-pro.store/favicon.png"
         }
       ]
     }
-    </script>
-    <script>
-      (function() {
-        try {
-          var schemaEl = document.querySelector('script[type="application/ld+json"]');
-          if (schemaEl && schemaEl.textContent && window.location.origin) {
-            schemaEl.textContent = schemaEl.textContent
-              .split('https://techvaul-pro.store').join(window.location.origin)
-              .split('https://technoapp-pro.com').join(window.location.origin);
-          }
-        } catch(e) {}
-      })();
     </script>
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased font-['Cairo',sans-serif]">

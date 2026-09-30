@@ -9,6 +9,7 @@ import {
   Code2, Monitor, Smartphone, Globe, Tag, Check
 } from 'lucide-react';
 import { TemplateCard } from './TemplateCard';
+import { OFFICIAL_SITE_URL, updatePageSeo } from '../utils/seo';
 
 interface Props {
   template: StoreTemplate;
@@ -50,20 +51,21 @@ export const ProductTemplatePage: React.FC<Props> = ({
     both: isEn ? 'Blogger XML & WordPress Theme' : 'بلوجر XML + ووردبريس ZIP',
   }[template.type];
 
-  // Dynamic SEO Structured Data
+  // Dynamic SEO Structured Data, Canonical & Meta Tags
   useEffect(() => {
     const slug = template.slug || template.id;
-    const currentUrl = `https://techvaul-pro.store/templates/${slug}`;
+    const currentUrl = `${OFFICIAL_SITE_URL}/templates/${slug}`;
     const pageTitle = `${isEn ? (template.nameEn || template.name) : template.name} | TechVault-Pro`;
     const metaDesc = isEn ? (template.shortDescriptionEn || template.shortDescription) : template.shortDescription;
 
-    document.title = pageTitle;
-
-    // Update Meta Description
-    let descMeta = document.querySelector('meta[name="description"]');
-    if (descMeta) {
-      descMeta.setAttribute('content', metaDesc);
-    }
+    // Enforce official canonical, OpenGraph, title, and description
+    updatePageSeo({
+      title: pageTitle,
+      description: metaDesc,
+      canonicalPath: `/templates/${slug}`,
+      ogImage: images[0] || template.mainImage,
+      ogType: 'product'
+    });
 
     // Insert Product & Breadcrumb JSON-LD
     const jsonLdId = 'product-structured-data';
@@ -87,7 +89,7 @@ export const ProductTemplatePage: React.FC<Props> = ({
           "sku": `TV-${template.id.toUpperCase()}`,
           "brand": {
             "@type": "Brand",
-            "name": "TechVault Pro"
+            "name": "TechVault-Pro"
           },
           "offers": {
             "@type": "Offer",
@@ -142,19 +144,19 @@ export const ProductTemplatePage: React.FC<Props> = ({
               "@type": "ListItem",
               "position": 1,
               "name": isEn ? "Home" : "الرئيسية",
-              "item": "https://techvaul-pro.store/"
+              "item": `${OFFICIAL_SITE_URL}/`
             },
             {
               "@type": "ListItem",
               "position": 2,
               "name": isEn ? "Templates Store" : "متجر القوالب",
-              "item": "https://techvaul-pro.store/templates"
+              "item": `${OFFICIAL_SITE_URL}/templates`
             },
             {
               "@type": "ListItem",
               "position": 3,
               "name": isEn ? (template.categoryEn || template.category) : template.category,
-              "item": `https://techvaul-pro.store/templates/category/${template.categorySlug || 'business'}`
+              "item": `${OFFICIAL_SITE_URL}/templates/category/${template.categorySlug || 'business'}`
             },
             {
               "@type": "ListItem",

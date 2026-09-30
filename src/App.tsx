@@ -7,6 +7,7 @@ import { fetchPublishedTemplatesFromDb } from './lib/storeService';
 import { DEFAULT_TEMPLATES } from './data/defaultTemplates';
 import { HomeMarketplaceSection } from './components/HomeMarketplaceSection';
 import { MarketplaceHome } from './components/MarketplaceHome';
+import { updatePageSeo } from './utils/seo';
 
 // Code-split heavy modals, admin portal, and secondary pages
 const InstallGuide = lazy(() => import('./components/InstallGuide').then(m => ({ default: m.InstallGuide })));
@@ -91,6 +92,41 @@ export default function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Synchronize Canonical and Global SEO when top-level tabs change
+  useEffect(() => {
+    if (activeTab === 'home') {
+      updatePageSeo({
+        title: 'TechVault-Pro | Marketplace for Website Templates & Digital Web Assets',
+        description: 'TechVault-Pro is the premier digital marketplace for production-ready website templates, Blogger XML themes, and modern web application designs across business, SaaS, portfolio, and ecommerce.',
+        canonicalPath: '/'
+      });
+    } else if (activeTab === 'store') {
+      updatePageSeo({
+        title: 'Website Templates Store & Digital Assets | TechVault-Pro',
+        description: 'Browse and download production-ready responsive website templates, Blogger XML themes, and WordPress themes on TechVault-Pro.',
+        canonicalPath: '/templates'
+      });
+    } else if (activeTab === 'guide') {
+      updatePageSeo({
+        title: 'Template Installation Guide & Documentation | TechVault-Pro',
+        description: 'Step-by-step setup and installation instructions for Blogger XML and WordPress themes.',
+        canonicalPath: '/guide'
+      });
+    } else if (activeTab === 'preview') {
+      updatePageSeo({
+        title: 'Live Template Studio & Preview | TechVault-Pro',
+        description: 'Interactive live responsive preview and customizer for TechVault-Pro templates.',
+        canonicalPath: '/preview'
+      });
+    } else if (activeTab === 'admin') {
+      updatePageSeo({
+        title: 'Admin Portal | TechVault-Pro',
+        description: 'TechVault-Pro administration and store management portal.',
+        canonicalPath: '/admin'
+      });
+    }
+  }, [activeTab]);
 
   const handleSelectTab = (tab: ActiveTab) => {
     setActiveTab(tab);
