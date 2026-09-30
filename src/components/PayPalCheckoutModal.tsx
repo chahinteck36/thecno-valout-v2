@@ -232,7 +232,7 @@ export const PayPalCheckoutModal: React.FC<Props> = ({
     const newOrder: StoreOrder = {
       orderId: genId,
       customerName: buyerName.trim(),
-      customerEmail: buyerEmail.trim() || 'whatsapp-order@techvault-pro.store',
+      customerEmail: buyerEmail.trim() || 'whatsapp-order@techvaul-pro.store',
       customerPhone: buyerPhone.trim(),
       templateId: selectedTemplate?.id || 'technoapp-pro-2026',
       templateName: selectedTemplate?.name || packageNameText,

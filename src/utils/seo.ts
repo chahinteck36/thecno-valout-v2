@@ -1,9 +1,9 @@
 /**
  * SEO & Canonical Management for TechVault-Pro
- * Official Canonical Domain: https://techvault-pro.store/
+ * Official Canonical Domain: https://techvaul-pro.store/
  */
 
-export const OFFICIAL_SITE_URL = 'https://techvault-pro.store';
+export const OFFICIAL_SITE_URL = 'https://techvaul-pro.store';
 
 /**
  * Formats a clean canonical URL ensuring official domain and normalized path.
@@ -30,7 +30,7 @@ export interface SeoOptions {
 
 /**
  * Updates head meta tags: Title, Description, Canonical URL, OpenGraph, and Twitter tags.
- * Always resolves canonical to https://techvault-pro.store/ regardless of current hostname (e.g. www or dev).
+ * Always resolves canonical to https://techvaul-pro.store/ regardless of current hostname (e.g. www or dev).
  */
 export function updatePageSeo(options: SeoOptions) {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
